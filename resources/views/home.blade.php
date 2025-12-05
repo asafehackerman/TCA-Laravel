@@ -1,6 +1,8 @@
 @extends('templates.main', [
     'titulo' => 'Sistema Pizzaria',
-    'cabecalho' => 'Home - Dashboard'
+    'cabecalho' => 'Home - Dashboard',
+    'rota' => 'home',
+    
 ])
 
 @section('conteudo')

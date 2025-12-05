@@ -1,8 +1,8 @@
 @extends('templates/main', [
     'titulo' => "Sistema Pizzaria",
     'cabecalho' => 'Criar Usuário',
-    'rota' => 'user.index', {{-- link de voltar para a lista --}}
-    'relatorio' => '', {{-- não precisa de relatório aqui --}}
+    'rota' => '',
+    'relatorio' => '',
 ])
 
 @section('conteudo')

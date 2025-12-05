@@ -24,28 +24,31 @@
             z-index: 0;
         }
         .texto-restrito-cima {
-            position: absolute;
-            top: 0px;
-            left: 130px;
+            position: fixed;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
             border: 1px solid #999;
             color: #999;
             font-size: 18px;
             font-weight: bolder;
             text-align: center;
-            padding: 1px 8px;
+            padding: 2px 10px;
+            z-index: 999;
         }
         .texto-restrito-baixo {
-            position: absolute;
-            bottom: 0px;
-            left: 130px;
+            position: fixed;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
             border: 1px solid #999;
             color: #999;
             font-size: 20px;
             font-weight: bolder;
             text-align: center;
-            padding: 1px 8px;
+            padding: 2px 10px;
+            z-index: 999;
         }
-
         .header {
             text-align: center;
             line-height: 1.2;
@@ -105,14 +108,14 @@
         <tbody>
             <tr>
                 <td style="width: 75px; text-align: left;">
-                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('/assets/img/logo_ifpr.png'))) }}" width="78" height="78" style="border-radius: 25%;">
+                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('/assets/img/logo.png'))) }}" width="78" height="78" style="border-radius: 25%;">
                 </td>
                 <td style="width: 1fr; text-align: center;">
                     <span style="font-size: 18px; font-weight: bold;">PIZZARIA</span>
                     <div style="font-size: 18px;">RELATÓRIO DE USUÁRIOS</div>
                 </td>
                 <td style="width: 75px; text-align: right;">
-                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('/assets/img/logo_ifpr.png'))) }}" width="90" height="90" style="border-radius: 25%;">
+                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('/assets/img/logo.png'))) }}" width="90" height="90" style="border-radius: 25%;">
                 </td>
             </tr>
         </tbody>

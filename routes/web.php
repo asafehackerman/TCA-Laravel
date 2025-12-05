@@ -17,3 +17,6 @@ return view('home');
 // Rotas
 Route::resource('/user', UserController::class);
 Route::resource('/pizza', PizzaController::class);
+
+// DOM PDF
+Route::get('/report/user', [UserController::class, 'report']) -> name('report.user');

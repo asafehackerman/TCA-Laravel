@@ -33,6 +33,6 @@ class PizzaSeeder extends Seeder
             ],
         ];
 
-        DB::table('pizzas')->insert($data);
+        DB::table('pizza')->insert($data);
     }
 }

@@ -101,13 +101,7 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         $user = User::find($id);
-
-        if ($user) {
-            // Remove foto antes de deletar
-            if ($user->foto && Storage::disk('public')->exists($user->foto)) {
-                Storage::disk('public')->delete($user->foto);
-            }
-
+        if(isset($user)) {
             $user->delete();
         }
 
