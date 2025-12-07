@@ -1,6 +1,6 @@
 @extends('templates/main', [
-    'titulo' => "Sistema Pizzaria",
-    'cabecalho' => 'Lista de Usuários',
+    'titulo' => "Asafe's Pizzeria",
+    'cabecalho' => 'Usuários Cadastrados',
     'rota' => 'user.create',
     'relatorio' => 'report.user',
     'class' => App\Models\User::class,
@@ -27,25 +27,28 @@
                 <td>{{ $user->email }}</td>
                 <td>{{ $user->role->name ?? '-' }}</td>
                 <td>
+                    @can('update', $user)
+                        <a href="{{ route('user.edit', $user->id) }}"
+                        class="btn btn-sm btn-outline-success">
+                            Alterar
+                        </a>
+                    @endcan
 
-                    <a href="{{ route('user.edit', $user->id) }}"
-                       class="btn btn-sm btn-outline-success">
-                        Alterar
-                    </a>
+                    @can('delete', $user)
+                        <form action="{{ route('user.destroy', $user->id) }}"
+                            method="POST"
+                            class="d-inline">
 
-                    <form action="{{ route('user.destroy', $user->id) }}"
-                          method="POST"
-                          class="d-inline">
+                            @csrf
+                            @method('DELETE')
 
-                        @csrf
-                        @method('DELETE')
-
-                        <button type="submit"
-                                class="btn btn-sm btn-outline-danger"
-                                onclick="return confirm('Deseja realmente remover este usuário?')">
-                            Remover
-                        </button>
-                    </form>
+                            <button type="submit"
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Deseja realmente remover este usuário?')">
+                                Remover
+                            </button>
+                        </form>
+                    @endcan
 
                 </td>
             </tr>

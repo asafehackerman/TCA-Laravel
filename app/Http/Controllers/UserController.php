@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -14,6 +16,8 @@ class UserController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', User::class);
+
         $users = User::all();
         return view('user.index', compact('users'));
     }
@@ -23,6 +27,8 @@ class UserController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', User::class);
+
         return view('user.create');
     }
 
@@ -31,20 +37,12 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create', User::class);
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'unique:users,email', 'ends_with:@gmail.com'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
-        ], [
-            'name.required' => 'O nome é obrigatório.',
-            'name.string' => 'O nome deve ser uma string.',
-            'email.required' => 'O email é obrigatório.',
-            'email.email' => 'O email não é válido.',
-            'email.unique' => 'Este email já existe.',
-            'email.ends_with' => 'O email deve terminar com @gmail.com.',
-            'password.required' => 'A senha é obrigatória.',
-            'password.min' => 'A senha deve ter pelo menos 6 caracteres.',
-            'password.confirmed' => 'A confirmação da senha não confere.',
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
         
         $user = new User();
@@ -65,6 +63,7 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $user = User::find($id);
+        Gate::authorize('edit', User::class);
 
         if ($user) {
             return view('user.edit', compact('user'));
@@ -79,6 +78,7 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         $user = User::find($id);
+        Gate::authorize('edit', User::class);
 
         if ($user) {
             $user->name = $request->name;
@@ -101,6 +101,8 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         $user = User::find($id);
+        Gate::authorize('delete', User::class);
+
         if(isset($user)) {
             $user->delete();
         }

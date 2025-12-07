@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pizza;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PizzaController extends Controller
 {
@@ -38,18 +39,23 @@ class PizzaController extends Controller
             'categoria.max'      => 'A categoria não pode ultrapassar 100 caracteres.',
         ]);
 
-        if($request->hasFile('foto')) {
-                // Upload File
-                $extensao_arq = $request->file('foto')->getClientOriginalExtension();
-                $name = $aluno->id.'_'.time().'.'.$extensao_arq;
-                $request->file('foto')->storeAs('fotos', $name, ['disk' => 'public']);
-                $aluno->foto = 'fotos/'.$name;
-                $aluno->save();
+        // ✅ Primeiro cria a pizza SEM a foto
+        $pizza = Pizza::create($request->except('foto'));
+
+        // ✅ Depois trata a imagem
+        if ($request->hasFile('foto')) {
+            $extensao = $request->file('foto')->getClientOriginalExtension();
+            $name = $pizza->id . '_' . time() . '.' . $extensao;
+
+            $request->file('foto')->storeAs('fotos', $name, 'public');
+
+            $pizza->foto = 'fotos/' . $name;
+            $pizza->save();
         }
 
-        Pizza::create($request->all());
         return redirect()->route('pizza.index');
     }
+
 
     public function edit(Pizza $pizza)
     {
@@ -76,16 +82,19 @@ class PizzaController extends Controller
             'categoria.max'      => 'A categoria não pode ultrapassar 100 caracteres.',
         ]);
 
-        if($request->hasFile('foto')) {
-                // Upload File
-                $extensao_arq = $request->file('foto')->getClientOriginalExtension();
-                $name = $aluno->id.'_'.time().'.'.$extensao_arq;
-                $request->file('foto')->storeAs('fotos', $name, ['disk' => 'public']);
-                $aluno->foto = 'fotos/'.$name;
-                $aluno->save();
+        if ($request->hasFile('foto')) {
+            $extensao = $request->file('foto')->getClientOriginalExtension();
+            $name = $pizza->id . '_' . time() . '.' . $extensao;
+
+            $request->file('foto')->storeAs('fotos', $name, 'public');
+
+            $pizza->foto = 'fotos/' . $name;
+            $pizza->save();
         }
 
-        $pizza->update($request->all());
+        // ✅ AQUI ESTÁ O CONSERTO REAL:
+        $pizza->update($request->except('foto'));
+
         return redirect()->route('pizza.index');
     }
 
@@ -97,5 +106,12 @@ class PizzaController extends Controller
         }
 
         return redirect()->route('pizza.index');
+    }
+
+    public function report()
+    {
+        $pizzas = Pizza::all();
+        $pdf = Pdf::loadView('pizza.report', ['pizzas' => $pizzas]);
+        return $pdf->stream('pizzas.pdf');
     }
 }

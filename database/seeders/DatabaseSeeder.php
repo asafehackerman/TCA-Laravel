@@ -17,10 +17,17 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Autenticação primeiro
+        $this->call(RoleSeeder::class);
+        $this->call(ResourceSeeder::class);
+        $this->call(PermissionSeeder::class);
+
+        // Usuários
+        $this->call(UserSeeder::class);
+
+        // CRUDs Comuns
         $this->call(PizzaSeeder::class);
+        $this->call(OtherSeeder::class);
+
     }
 }
